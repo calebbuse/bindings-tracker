@@ -1,7 +1,78 @@
-cd bindings-tracker-pwa
-git init
-git add .
-git commit -m "Initial commit"
-git branch -M main
-git remote add origin https://github.com/YOUR-USERNAME/bindings-tracker.git
-git push -u origin main
+import { useState } from "react";
+import logo from "./assets/Wiley Logo-Black-Alpha.png";
+
+function App() {
+  const [products, setProducts] = useState([
+    { product: "Wiley's Pro Jump Bindings (3 Pair)", size: "S", quantity: 6, status: "Being Built" },
+    { product: "Wiley's Pro Jump Bindings (3 Pair)", size: "M", quantity: 8, status: "Being Built" },
+  ]);
+
+  const [newProduct, setNewProduct] = useState({ product: "", size: "", quantity: 1, status: "Being Built" });
+
+  const addProduct = () => {
+    setProducts([...products, newProduct]);
+    setNewProduct({ product: "", size: "", quantity: 1, status: "Being Built" });
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-100 flex flex-col">
+      {/* Header */}
+      <header className="bg-black p-4 flex items-center justify-center shadow-md">
+        <img src={logo} alt="Wiley Logo" className="h-12" />
+      </header>
+
+      {/* Main */}
+      <main className="flex-1 p-4">
+        <h1 className="text-2xl font-bold mb-4">Bindings Production Tracker</h1>
+
+        {/* Product list */}
+        <div className="space-y-3">
+          {products.map((p, i) => (
+            <div key={i} className="bg-white shadow rounded-lg p-4 flex justify-between items-center">
+              <div>
+                <p className="font-semibold">{p.product}</p>
+                <p className="text-sm text-gray-500">Size: {p.size}</p>
+              </div>
+              <div className="text-right">
+                <p className="font-bold">{p.quantity} pcs</p>
+                <p className="text-sm text-green-600">{p.status}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Add product form */}
+        <div className="mt-6 bg-white shadow rounded-lg p-4">
+          <h2 className="text-lg font-semibold mb-3">Add Product</h2>
+          <input
+            className="w-full border rounded p-2 mb-2"
+            placeholder="Product Name"
+            value={newProduct.product}
+            onChange={(e) => setNewProduct({ ...newProduct, product: e.target.value })}
+          />
+          <input
+            className="w-full border rounded p-2 mb-2"
+            placeholder="Size"
+            value={newProduct.size}
+            onChange={(e) => setNewProduct({ ...newProduct, size: e.target.value })}
+          />
+          <input
+            type="number"
+            className="w-full border rounded p-2 mb-2"
+            placeholder="Quantity"
+            value={newProduct.quantity}
+            onChange={(e) => setNewProduct({ ...newProduct, quantity: parseInt(e.target.value) })}
+          />
+          <button
+            onClick={addProduct}
+            className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800"
+          >
+            Add Product
+          </button>
+        </div>
+      </main>
+    </div>
+  );
+}
+
+export default App;
